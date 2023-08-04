@@ -3,7 +3,8 @@ const cookieParser = require('cookie-parser');
 
 const db=require("./models/index")
 const { userRoute } = require("./routes/user.routes")
-const { authenticate } = require("./middleware/auth")
+const { authenticate } = require("./middleware/auth");
+const { postRoute } = require("./routes/post.routes");
 
 require("dotenv").config()
 const app=express()
@@ -17,6 +18,7 @@ app.get("/", (req,res)=>{
 
 
 app.use("/", userRoute)
+app.use("/api", postRoute)
 app.get("/pro", authenticate, (req,res)=>{
     res.send("Protected route")
 })
