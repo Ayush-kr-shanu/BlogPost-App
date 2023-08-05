@@ -35,5 +35,11 @@ const User = sequelize.define("User", {
     defaultValue: DataTypes.NOW,
   },
 });
+
+// Define the association with PostHead model
+User.hasMany(sequelize.models.PostHead, {
+  foreignKey: 'userId',
+  as: 'posts',
+});
 return User
 }

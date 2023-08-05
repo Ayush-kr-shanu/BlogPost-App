@@ -10,6 +10,22 @@ const Comment = sequelize.define('Comment', {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    postId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "PostBody",
+        field: "id"
+      }
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "User",
+        field: "id"
+      }
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

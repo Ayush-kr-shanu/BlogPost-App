@@ -5,6 +5,7 @@ const db=require("./models/index")
 const { userRoute } = require("./routes/user.routes")
 const { authenticate } = require("./middleware/auth");
 const { postRoute } = require("./routes/post.routes");
+const { commentRoute } = require("./routes/comment.routes");
 
 require("dotenv").config()
 const app=express()
@@ -19,9 +20,7 @@ app.get("/", (req,res)=>{
 
 app.use("/", userRoute)
 app.use("/api", postRoute)
-app.get("/pro", authenticate, (req,res)=>{
-    res.send("Protected route")
-})
+app.use("/", commentRoute)
 
 db.sequelize.sync().then(()=>{
     app.listen(4500, ()=>{

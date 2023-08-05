@@ -10,6 +10,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    postHeadId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "PostHead",
+        field: "id"
+      }
+    },
+    comments: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: false,
+      defaultValue: []
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
