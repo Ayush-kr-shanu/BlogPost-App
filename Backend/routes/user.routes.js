@@ -51,21 +51,20 @@ userRoute.post("/login", async (req, res) => {
       }
   
       // Create JWT token
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_CODE, {
+      const token = jwt.sign({ userId: user.id, username:user.name, userEmail:user.email }, process.env.JWT_CODE, {
         expiresIn: "1h",
       });
   
       // Set the token as HttpOnly cookie
       res.cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Use the correct variable name here
-        maxAge: 3600000,
+        expires:new Date(Date.now()+ 2589200000),
+        httpOnly: true
       });
       
       return res.status(201).json({msg:"Logged in sucesfully", Token:token, user:user})
       
     } catch (err) {
-      return res.status(500).json({ message: 'Server error', err: err.message });
+      return res.status(500).json({ msg: 'Server error', err: err.message });
     }
   });
   

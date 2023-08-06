@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-const LoginForm = () => {
+const LoginForm = ({onLogin}) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -22,7 +23,6 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      // Replace 'YOUR_LOGIN_API_ENDPOINT' with your actual backend API endpoint for login
       const response = await fetch(`${url}login`, {
         method: 'POST',
         headers: {
@@ -32,14 +32,20 @@ const LoginForm = () => {
       });
 
       const data = await response.json();
+      // console.log(data, "THis is sdfdsgds")
 
       if (response.ok) {
-        // document.cookie = `token=${data.Token}`
+        const token=data.Token
+        console.log("Token received from server:", token);
+
+        
+        Cookies.set('token', data.Token, { expires: 7 })
+        Cookies.set('username', data.user.name, { expires: 7 });
         setAlertMessage({ type: 'success', text: data.message });
         setTimeout(() => {
-          // Redirect to home page after a short delay (2 seconds in this example)
           navigate('/');
         }, 2000);
+        onLogin(data.user.name);
       } else {
         setAlertMessage({ type: 'danger', text: data.error });
       }

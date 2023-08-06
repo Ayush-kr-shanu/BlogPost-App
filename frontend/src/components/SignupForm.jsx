@@ -17,29 +17,30 @@ const SignupForm = () => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  const url="http://localhost:4500/"
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      // Replace 'YOUR_SIGNUP_API_ENDPOINT' with your actual backend API endpoint for signup
-      const response = await fetch('YOUR_SIGNUP_API_ENDPOINT', {
+      const response = await fetch(`${url}register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
-        setAlertMessage({ type: 'success', text: data.message });
+        setAlertMessage({ type: 'success', text: data.msg });
         setTimeout(() => {
           // Redirect to login page after a short delay (2 seconds in this example)
           navigate('/login');
         }, 2000);
       } else {
-        setAlertMessage({ type: 'danger', text: data.error });
+        setAlertMessage({ type: 'danger', text: data.msg });
       }
     } catch (error) {
       setAlertMessage({ type: 'danger', text: 'An error occurred. Please try again later.' });

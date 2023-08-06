@@ -184,19 +184,20 @@ postRoute.get('/full-post/:postHeadId', async (req, res) => {
     } catch (err) {
       return res.status(500).json({ message: 'Server error', error: err.message });
     }
-  });
+});
 
 // Route to create a new post
 postRoute.post('/post', authenticate,  async (req, res) => {
     try {
       const { title, description, content } = req.body;
-    //   const userId = req.user.id;
+      const userId = req.user.id;
   
       // Create the postHead
-      const postHead = await PostHead.create({ title, description });
+      const postHead = await PostHead.create({ title, description, userId });
+      // console.log(postHead);
   
       // Create the associated postBody
-      const postBody = await PostBody.create({ content, postHeadId: postHead.id });
+      const postBody = await PostBody.create({ content, postHeadId: postHead.id, userId });
   
       // Return the created postHead and postBody as the response
       return res.status(201).json({ message: 'Post created successfully', postHead, postBody });
@@ -205,7 +206,39 @@ postRoute.post('/post', authenticate,  async (req, res) => {
     }
 });
 
+// ROute for my posts
+postRoute.get("/my-post", authenticate, async (req,res)=>{
+  try {
+    const userId=req.user.id
+    const userPost = await PostHead.findAll({
+      where: { userId },
+      include: { model: PostBody, as: 'postHead' }, // Use the correct alias for the association
+    });
+    return res.status(200).json({userPost})
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error', error: err.message });
+  }
+})
 
 
+postRoute.delete("/my-post", authenticate, async (req,res)=>{
+  try {
+    const postId=req.params.id
+
+    const postHead = await PostHeadModel.findByIdAndDelete(postId);
+    if (!postHead) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    const postBody = await PostBodyModel.findOne({ postHeadId: postId });
+    if (postBody) {
+      await PostBodyModel.findByIdAndDelete(postBody.id);
+    }
+
+    return res.status(204).json({ message: "Post deleted successfully" });
+  } catch (err) {
+    return res.status(500).json({ error: "Server error", err:err.message });
+  }
+})
 
 module.exports={postRoute}
