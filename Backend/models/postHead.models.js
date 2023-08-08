@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         field: "id"
       }
     },
+    comments: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -40,5 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     as: "postBody",
   });
 
+  // Add association with User mode
+  
   return PostHead;
 };

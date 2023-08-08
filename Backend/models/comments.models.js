@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-const Comment = sequelize.define('Comment', {
+  const Comment = sequelize.define('Comment', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -9,22 +9,6 @@ const Comment = sequelize.define('Comment', {
     content: {
       type: DataTypes.TEXT,
       allowNull: false,
-    },
-    postId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "PostBody",
-        field: "id"
-      }
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "User",
-        field: "id"
-      }
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -36,6 +20,37 @@ const Comment = sequelize.define('Comment', {
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'User',
+        key: 'id',
+      },
+    },
+    postHeadId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'PostHead',
+        key: 'id',
+      },
+    },
   });
-  return Comment
-}
+
+  Comment.associate = (models) => {
+    Comment.belongsTo(models.PostHead, {
+      foreignKey: 'postHeadId',
+      as: 'postHead',
+    });
+  };
+
+  Comment.associate = (models) => {
+    Comment.belongsTo(models.User, {
+      foreignKey: 'UserId',
+      as: 'user',
+    });
+  };
+
+  return Comment;
+};

@@ -1,20 +1,20 @@
 const express=require("express")
 const { authenticate } = require("../middleware/auth")
-const { PostHead, PostBody }=require("../models/index")
+const { PostHead, PostBody, User }=require("../models/index")
 
 require("dotenv").config()
 const postRoute=express.Router()
 
 //ALl POST-HEAD ROUTES-----------------------------------------------------------
 postRoute.get("/post-head", async(req,res)=>{
-    try {
-        const postHeads = await PostHead.findAll();
+  try {
+    const postHeads = await PostHead.findAll()
 
-        //return array of Posthead as the response
-        return res.status(200).json({ postHeads });
-    } catch (err) {
-        return res.status(500).json({ message: 'Server error', error: err.message });
-    }
+    // Return array of Posthead with the user's name as the response
+    return res.status(200).json({ postHeads });
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error', error: err.message });
+  }
 })
 
 //Create post with posthead
@@ -95,9 +95,11 @@ postRoute.delete("/post-head/:id",authenticate, async (req,res)=>{
             return res.status(404).json({ message: 'PostHead not found' });
         }
 
+        console.log('postHead.UserId:', postHead.userId);
+        console.log('userId:', userId);
        // Check if the authenticated user owns the PostHead
-       if (postHead.UserId !== userId) {
-         return res.status(403).json({ message: 'You are not authorized to update this PostHead' });
+       if (postHead.userId !== userId) {
+         return res.status(403).json({ message: 'You are not authorized to delete this PostHead' });
        }
 
        // Delete the PostHead
@@ -191,6 +193,7 @@ postRoute.post('/post', authenticate,  async (req, res) => {
     try {
       const { title, description, content } = req.body;
       const userId = req.user.id;
+      console.log(userId);
   
       // Create the postHead
       const postHead = await PostHead.create({ title, description, userId });
@@ -210,10 +213,7 @@ postRoute.post('/post', authenticate,  async (req, res) => {
 postRoute.get("/my-post", authenticate, async (req,res)=>{
   try {
     const userId=req.user.id
-    const userPost = await PostHead.findAll({
-      where: { userId },
-      include: { model: PostBody, as: 'postHead' }, // Use the correct alias for the association
-    });
+    const userPost = await PostHead.findAll({where: { userId }});
     return res.status(200).json({userPost})
   } catch (err) {
     return res.status(500).json({ message: 'Server error', error: err.message });
@@ -221,24 +221,77 @@ postRoute.get("/my-post", authenticate, async (req,res)=>{
 })
 
 
-postRoute.delete("/my-post", authenticate, async (req,res)=>{
+postRoute.put("/full-post/:id", authenticate, async (req, res) => {
   try {
-    const postId=req.params.id
+    const postId = req.params.id;
+    const { title, description, content } = req.body;
+    const userId = req.user.id;
 
-    const postHead = await PostHeadModel.findByIdAndDelete(postId);
+    // Find the PostHead or PostBody by ID
+    const postHead = await PostHead.findByPk(postId);
+    const postBody = await PostBody.findByPk(postId);
+
+    // Check if the authenticated user owns the associated PostHead or PostBody
+    let isAuthorized = false;
+
+    if (postHead && postHead.userId === userId) {
+      isAuthorized = true;
+      // Update the PostHead
+      if (title && description) {
+        postHead.title = title;
+        postHead.description = description;
+        await postHead.save();
+      }
+    }
+
+    if (postBody && postBody.PostHead.userId === userId) {
+      isAuthorized = true;
+      // Update the PostBody
+      if (content) {
+        postBody.content = content;
+        await postBody.save();
+      }
+    }
+
+    if (!isAuthorized) {
+      return res.status(403).json({ message: 'You are not authorized to update this Post' });
+    }
+
+    // Return the updated PostHead or PostBody as the response
+    if (postHead) {
+      return res.status(200).json({ message: 'PostHead updated successfully', postHead });
+    } else if (postBody) {
+      return res.status(200).json({ message: 'PostBody updated successfully', postBody });
+    } else {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+
+
+postRoute.delete("/my-post/:id", authenticate, async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    const postHead = await PostHead.findByPk(postId);
+    postHead.destroy()
     if (!postHead) {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    const postBody = await PostBodyModel.findOne({ postHeadId: postId });
+    const postBody = await PostBody.findOne({ postHeadId: postId });
     if (postBody) {
-      await PostBodyModel.findByIdAndDelete(postBody.id);
+      await postBody.destroy()
     }
 
     return res.status(204).json({ message: "Post deleted successfully" });
   } catch (err) {
-    return res.status(500).json({ error: "Server error", err:err.message });
+    return res.status(500).json({ error: "Server error", err: err.message });
   }
-})
+});
+
 
 module.exports={postRoute}

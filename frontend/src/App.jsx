@@ -38,6 +38,7 @@ const App = () => {
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/create-post" element={<CreatePostForm />} />
         <Route path="/mypost" element={<MyPosts />} />
+        <Route path='/post/:postId' element={<PostDetail />} />
       </Routes>
     </Router>
   );

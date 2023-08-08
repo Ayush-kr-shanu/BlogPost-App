@@ -18,11 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         field: "id"
       }
     },
-    // comments: {
-    //   type: DataTypes.ARRAY(DataTypes.INTEGER),
-    //   allowNull: true,
-    //   defaultValue: []
-    // },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

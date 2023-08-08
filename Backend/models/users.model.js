@@ -38,8 +38,10 @@ const User = sequelize.define("User", {
 
 // Define the association with PostHead model
 User.hasMany(sequelize.models.PostHead, {
-  foreignKey: 'userId',
-  as: 'posts',
+  foreignKey: "userId",
+  as: "postHeads",
 });
+
+
 return User
 }
