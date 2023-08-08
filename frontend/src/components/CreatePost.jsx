@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, FormControl, FormLabel, Input, Textarea, useToast } from '@chakra-ui/react';
 import Cookies from 'js-cookie';
 
+const url="http://13.211.33.106:4500/"
+
 const CreatePostForm = () => {
   const navigate = useNavigate();
   const toast = useToast();
@@ -18,8 +20,6 @@ const CreatePostForm = () => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
-
-  const url="http://localhost:4500/"
 
   const handleSubmit = async (e) => {
     e.preventDefault();

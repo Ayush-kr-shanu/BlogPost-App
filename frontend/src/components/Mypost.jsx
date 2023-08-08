@@ -3,7 +3,7 @@ import { Box, Text, List, ListItem, Heading, Divider, Button } from '@chakra-ui/
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-const url = 'http://localhost:4500/';
+const url="http://13.211.33.106:4500/"
 
 const MyPosts = () => {
   const [userPosts, setUserPosts] = useState([]);

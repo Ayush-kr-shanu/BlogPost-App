@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const url = "http://localhost:4500/";
+const url="http://13.211.33.106:4500/"
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);

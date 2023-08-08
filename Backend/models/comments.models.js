@@ -43,14 +43,13 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'postHeadId',
       as: 'postHead',
     });
-  };
 
-  Comment.associate = (models) => {
     Comment.belongsTo(models.User, {
-      foreignKey: 'UserId',
+      foreignKey: 'userId',
       as: 'user',
     });
   };
+
 
   return Comment;
 };

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+const url="http://13.211.33.106:4500/"
+
 const SignupForm = () => {
     const navigate = useNavigate();
 
@@ -17,7 +19,6 @@ const SignupForm = () => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const url="http://localhost:4500/"
   
   const handleSubmit = async (e) => {
     e.preventDefault();
