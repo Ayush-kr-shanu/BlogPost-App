@@ -17,6 +17,8 @@ Welcome to the Blogging Application! This is a full-stack web application built 
 - Authentication: JWT (JSON Web Tokens)
 - Styling: CSS (Chakra UI and BootStrap provides some styling as well)
 
+-[Backend public Url](http://13.211.33.106:4500/)
+
 ## Getting Started
 
 1. Clone this repository to your local machine.
