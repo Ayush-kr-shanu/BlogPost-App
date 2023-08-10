@@ -6,6 +6,7 @@ import { useHistory } from "react-router";
 import Cookies from "js-cookie";
 
 const url="http://13.211.33.106:4500/"
+// const url="http://localhost:4500/"
 const token = Cookies.get('token');
 
 const PostDetail = () => {
@@ -251,7 +252,7 @@ const PostDetail = () => {
           <p>Date: {formatDate(post.createdAt)}</p>
           {post.postBody?.content ? ( // Add a conditional check for the post content
             <><p>{post.postBody.content}</p>
-            <Button colorScheme="teal" onClick={handleEditPost}>Edit Post</Button>
+            {/* <Button colorScheme="teal" onClick={handleEditPost}>Edit Post</Button> */}
             <Button colorScheme="red" onClick={handleDeletePost}>Delete Post</Button>
             </>
           ) : (
