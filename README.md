@@ -18,7 +18,7 @@ Welcome to the Blogging Application! This is a full-stack web application built 
 - Styling: CSS (Chakra UI and BootStrap provides some styling as well)
 
 ## Public URL's
--[Backend public Url](http://52.65.31.90:3006/)
+-[Backend public Url](http://52.65.31.90:3006/) <br>
 -[Frontend public Url](http://supperblogbook.s3-website-ap-southeast-2.amazonaws.com/)
 
 ## Getting Started
