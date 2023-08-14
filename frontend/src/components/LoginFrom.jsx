@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import url from './url';
 
-const url="http://13.211.33.106:4500/"
 
 const LoginForm = ({onLogin}) => {
   const navigate = useNavigate();

@@ -2,20 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useParams,useNavigate } from "react-router-dom";
 import { Box, Input, Button, useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router";
-
+import url from './url';
 import Cookies from "js-cookie";
 
-const url="http://13.211.33.106:4500/"
-// const url="http://localhost:4500/"
+
 const token = Cookies.get('token');
 
 const PostDetail = () => {
   const { postId } = useParams();
-  const navigate = useNavigate()
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const showToast = useToast();
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Fetch the post detail and comments from the API
@@ -86,37 +85,6 @@ const PostDetail = () => {
     }
   };
 
-  const handleEditComment = async (commentId, newContent) => {
-    const token = Cookies.get('token');
-    try {
-      const response = await fetch(`${url}post-body/postId/comment/:commentId`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `${token}`,
-        },
-        body: JSON.stringify({ content: newContent }),
-      });
-      const data = await response.json();
-      console.log(data); // Log the data to inspect its structure
-  
-      if (response.ok) {
-        // Check if the authenticated user is the owner of the comment
-        if (data.comment.userId === token.userId) {
-          // Update the comment in the comments state
-          setComments((prevComments) =>
-            prevComments.map((c) => (c.id === commentId ? { ...c, content: newContent } : c))
-          );
-        } else {
-          console.error('Error updating comment: You are not authorized to edit this comment.');
-        }
-      } else {
-        console.error('Error updating comment:', data.error);
-      }
-    } catch (error) {
-      console.error('Error updating comment:', error);
-    }
-  };
   
 
   const handleDeleteComment = async (commentId) => {

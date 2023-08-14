@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, Text, List, ListItem, Heading, Divider, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import url from './url';
 
-const url="http://13.211.33.106:4500/"
 
 const MyPosts = () => {
   const [userPosts, setUserPosts] = useState([]);

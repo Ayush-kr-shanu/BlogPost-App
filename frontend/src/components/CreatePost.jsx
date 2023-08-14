@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, FormControl, FormLabel, Input, Textarea, useToast } from '@chakra-ui/react';
 import Cookies from 'js-cookie';
+import url from './url';
 
-const url="http://13.211.33.106:4500/"
 
 const CreatePostForm = () => {
   const navigate = useNavigate();
